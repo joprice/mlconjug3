@@ -16,6 +16,8 @@ functions for feature extraction and evaluation.
 
 from .PyVerbiste import Verbiste
 
+import importlib
+
 from .conjug_manager import ConjugManager
 
 from .constants import *
@@ -35,7 +37,6 @@ from concurrent.futures import ProcessPoolExecutor
 from random import Random
 from collections import defaultdict
 import joblib
-import pkg_resources
 import re
 from zipfile import ZipFile
 
@@ -71,15 +72,11 @@ class Conjugator:
         self.language = language
         self.conjug_manager = Verbiste(language=language)
         if not model:
-            with ZipFile(
-                pkg_resources.resource_stream(
-                    RESOURCE_PACKAGE, PRE_TRAINED_MODEL_PATH[language]
-                )
-            ) as content:
-                with content.open(
-                    "trained_model-{}-final.pickle".format(self.language), "r"
-                ) as archive:
-                    model = joblib.load(archive)
+            template_res = importlib.resources.files(RESOURCE_PACKAGE).joinpath(PRE_TRAINED_MODEL_PATH[language])
+            with importlib.resources.as_file(template_res) as file:
+                with ZipFile(file) as content:
+                    with content.open( "trained_model-{}-final.pickle".format(self.language), "r") as archive:
+                        model = joblib.load(archive)
         if model:
             self.set_model(model)
         else:
