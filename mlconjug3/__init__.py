@@ -46,7 +46,6 @@ from sklearn.svm import LinearSVC
 from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
 
-import pkg_resources
 import platform
 from locale import windows_locale, getdefaultlocale
 import gettext
