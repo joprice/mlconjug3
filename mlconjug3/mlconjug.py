@@ -16,7 +16,7 @@ functions for feature extraction and evaluation.
 
 from .PyVerbiste import Verbiste
 
-import importlib
+import importlib.resources
 
 from .conjug_manager import ConjugManager
 
