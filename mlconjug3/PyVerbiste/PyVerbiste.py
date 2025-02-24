@@ -20,7 +20,6 @@ import copy
 import defusedxml.ElementTree as ET
 import json
 from collections import OrderedDict
-import pkg_resources
 from mlconjug3.constants import *
 from mlconjug3.verbs import *
 from mlconjug3.conjug_manager import *
