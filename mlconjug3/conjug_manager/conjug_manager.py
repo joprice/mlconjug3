@@ -16,10 +16,9 @@ import copy
 import defusedxml.ElementTree as ET
 import json
 from collections import OrderedDict
-import pkg_resources
 from mlconjug3.constants import *
 from mlconjug3.verbs import *
-
+import importlib.resources
 
 class ConjugManager:
     """
@@ -45,15 +44,15 @@ class ConjugManager:
         self.language = "fr" if language == "default" else language
         self.verbs = {}
         self.conjugations = OrderedDict()
-        verbs_file = pkg_resources.resource_filename(
-            RESOURCE_PACKAGE, VERBS_RESOURCE_PATH[self.language]
-        )
-        self._load_verbs(verbs_file)
+
+        template_res = importlib.resources.files(RESOURCE_PACKAGE).joinpath(VERBS_RESOURCE_PATH[self.language])
+        with importlib.resources.as_file(template_res) as verbs_file:
+            self._load_verbs(str(verbs_file))
         self._allowed_endings = self._detect_allowed_endings()
-        conjugations_file = pkg_resources.resource_filename(
-            RESOURCE_PACKAGE, CONJUGATIONS_RESOURCE_PATH[self.language]
-        )
-        self._load_conjugations(conjugations_file)
+
+        template_res = importlib.resources.files(RESOURCE_PACKAGE).joinpath(CONJUGATIONS_RESOURCE_PATH[self.language])
+        with importlib.resources.as_file(template_res) as conjugations_file:
+            self._load_conjugations(str(conjugations_file))
         self.templates = sorted(self.conjugations.keys())
         return
 
